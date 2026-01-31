@@ -4,13 +4,13 @@ A minimalist, dark-mode web application for speed reading using **Rapid Serial V
 
 ## Features
 
-- **RSVP Display** - Words appear one at a time at your chosen speed (100-1000 WPM)
+- **RSVP Display** - Words appear one at a time at your chosen speed (10-100 WPM for testing)
 - **ORP Highlighting** - The optimal focus point of each word is highlighted in red and centered, minimizing eye movement
 - **File Support** - Upload `.txt` or `.pdf` files
 - **Smart Pausing** - Automatic pauses on punctuation (sentences, clauses) for better comprehension
 - **Font Options** - Choose between Monospace, Sans-serif, or Serif fonts
 - **Focus Guide** - Optional vertical guide lines to help focus on the ORP
-- **Keyboard Shortcuts** - Full keyboard control for power users
+- **Keyboard Shortcut** - Press Space to play/pause
 - **Settings Persistence** - Your preferences are saved locally
 
 ## Getting Started
@@ -31,21 +31,11 @@ npm run start
 
 Open [http://localhost:3000](http://localhost:3000) to use the app.
 
-## Keyboard Shortcuts
+## Keyboard Shortcut
 
 | Key | Action |
 |-----|--------|
 | `Space` | Play / Pause |
-| `R` | Reset to beginning |
-| `←` | Previous sentence |
-| `→` | Next sentence |
-| `Shift + ←` | Previous word (when paused) |
-| `Shift + →` | Next word (when paused) |
-| `↑` | Increase WPM |
-| `↓` | Decrease WPM |
-| `1` / `2` / `3` | Mono / Sans / Serif font |
-| `G` | Toggle focus guide |
-| `?` | Show shortcuts help |
 
 ## How It Works
 
