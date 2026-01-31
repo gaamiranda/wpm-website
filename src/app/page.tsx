@@ -7,7 +7,7 @@ import { useFileProcessor } from '@/hooks/useFileProcessor';
 import { useSettings } from '@/hooks/useSettings';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { ReaderContainer } from '@/components/reader';
-import { ControlsPanel, KeyboardShortcutsHelp, KeyboardShortcutsButton } from '@/components/controls';
+import { ControlsPanel } from '@/components/controls';
 import { FileUpload } from '@/components/upload';
 import type { CompletionStats } from '@/types';
 
@@ -21,7 +21,6 @@ export default function Home() {
 
   // UI state
   const [stats, setStats] = useState<CompletionStats | null>(null);
-  const [showShortcuts, setShowShortcuts] = useState(false);
 
   // Get words from processed file, or empty array if no file
   const words = useMemo(
@@ -55,27 +54,11 @@ export default function Home() {
     updateWpm(wpm);
   };
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts (Space to play/pause)
   useKeyboardShortcuts({
     engine,
     hasContent,
-    onFontChange: updateFontFamily,
-    onFocusGuideToggle: () => updateFocusGuide(!settings.focusGuideEnabled),
-    onWpmChange: handleWpmChange,
   });
-
-  // Listen for ? key to show shortcuts
-  useEffect(() => {
-    const handleQuestionMark = (e: KeyboardEvent) => {
-      if (e.key === '?' && !showShortcuts) {
-        e.preventDefault();
-        setShowShortcuts(true);
-      }
-    };
-
-    window.addEventListener('keydown', handleQuestionMark);
-    return () => window.removeEventListener('keydown', handleQuestionMark);
-  }, [showShortcuts]);
 
   // Handle file clear - also reset engine
   const handleClearFile = () => {
@@ -169,18 +152,11 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto flex flex-col items-center gap-2 pt-12">
-        <KeyboardShortcutsButton onClick={() => setShowShortcuts(true)} />
+      <footer className="mt-auto pt-12">
         <p className="text-xs text-zinc-600">
           RSVP Speed Reader
         </p>
       </footer>
-
-      {/* Keyboard shortcuts modal */}
-      <KeyboardShortcutsHelp
-        isOpen={showShortcuts}
-        onClose={() => setShowShortcuts(false)}
-      />
     </div>
   );
 }
