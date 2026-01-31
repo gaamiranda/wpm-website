@@ -26,13 +26,8 @@ export function useKeyboardShortcuts({
 }: KeyboardShortcutsConfig): void {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      // Ignore if typing in an input field
-      const target = event.target as HTMLElement;
-      if (
-        target.tagName === 'INPUT' ||
-        target.tagName === 'TEXTAREA' ||
-        target.isContentEditable
-      ) {
+      // Only handle Space key
+      if (event.key !== ' ') {
         return;
       }
 
@@ -41,11 +36,15 @@ export function useKeyboardShortcuts({
         return;
       }
 
-      // Play/Pause with Space
-      if (event.key === ' ') {
-        event.preventDefault();
-        engine.toggle();
+      // Prevent default behavior (e.g., activating focused button/slider)
+      event.preventDefault();
+      
+      // Blur any focused element so Space always controls playback
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
       }
+
+      engine.toggle();
     },
     [engine, hasContent]
   );
