@@ -38,6 +38,14 @@ export function useRSVPEngine(
   const readingStartTimeRef = useRef<number>(0);
   // Track last rendered index to avoid re-triggering effect on state change
   const lastRenderedIndexRef = useRef<number>(0);
+  
+  // Refs to hold latest values without causing effect restarts
+  const wordsRef = useRef<WordToken[]>(words);
+  const onCompleteRef = useRef(onComplete);
+  
+  // Keep refs updated
+  wordsRef.current = words;
+  onCompleteRef.current = onComplete;
 
 
 
@@ -85,9 +93,17 @@ export function useRSVPEngine(
     [cumulativeTimes, words.length]
   );
 
-  // Main animation loop
+  // Refs for values needed in animation loop (to avoid effect restarts)
+  const cumulativeTimesRef = useRef(cumulativeTimes);
+  const totalReadingTimeRef = useRef(totalReadingTime);
+  
+  // Keep these refs updated
+  cumulativeTimesRef.current = cumulativeTimes;
+  totalReadingTimeRef.current = totalReadingTime;
+
+  // Main animation loop - only restarts when isPlaying changes
   useEffect(() => {
-    if (!isPlaying || words.length === 0) {
+    if (!isPlaying || wordsRef.current.length === 0) {
       return;
     }
 
@@ -98,27 +114,43 @@ export function useRSVPEngine(
 
     // Set start time, accounting for any accumulated time from previous plays
     startTimeRef.current = performance.now() - accumulatedTimeRef.current;
-    
-    // Initialize the ref with current state
-    lastRenderedIndexRef.current = currentIndex;
 
     const tick = (now: number) => {
       const elapsed = now - startTimeRef.current;
-      const targetIndex = findIndexForTime(elapsed);
+      const currentWords = wordsRef.current;
+      const currentCumulativeTimes = cumulativeTimesRef.current;
+      const currentTotalTime = totalReadingTimeRef.current;
+      
+      // Binary search inline to find word index for elapsed time
+      let targetIndex = 0;
+      if (currentCumulativeTimes.length > 0) {
+        let low = 0;
+        let high = currentCumulativeTimes.length - 1;
+        while (low < high) {
+          const mid = Math.floor((low + high + 1) / 2);
+          if (currentCumulativeTimes[mid] <= elapsed) {
+            low = mid;
+          } else {
+            high = mid - 1;
+          }
+        }
+        targetIndex = Math.min(low, currentWords.length - 1);
+      }
 
       // Check if we've reached the end
-      if (targetIndex >= words.length - 1 && elapsed >= totalReadingTime) {
-        setCurrentIndex(words.length - 1);
-        lastRenderedIndexRef.current = words.length - 1;
+      if (targetIndex >= currentWords.length - 1 && elapsed >= currentTotalTime) {
+        setCurrentIndex(currentWords.length - 1);
+        lastRenderedIndexRef.current = currentWords.length - 1;
         setIsPlaying(false);
         setIsComplete(true);
 
         // Calculate and report completion stats
-        if (onComplete && readingStartTimeRef.current > 0) {
+        const onCompleteCb = onCompleteRef.current;
+        if (onCompleteCb && readingStartTimeRef.current > 0) {
           const totalTime = (now - readingStartTimeRef.current) / 1000;
-          const averageWpm = Math.round((words.length / totalTime) * 60);
-          onComplete({
-            totalWords: words.length,
+          const averageWpm = Math.round((currentWords.length / totalTime) * 60);
+          onCompleteCb({
+            totalWords: currentWords.length,
             totalTime,
             averageWpm,
           });
@@ -142,16 +174,7 @@ export function useRSVPEngine(
         cancelAnimationFrame(rafIdRef.current);
       }
     };
-    // Note: currentIndex is intentionally excluded to prevent infinite restart loop
-    // The ref (lastRenderedIndexRef) tracks the actual index inside the animation loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isPlaying,
-    words,
-    findIndexForTime,
-    totalReadingTime,
-    onComplete,
-  ]);
+  }, [isPlaying]);
 
   // Play control
   const play = useCallback(() => {

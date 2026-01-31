@@ -40,12 +40,14 @@ export default function Home() {
     },
   });
 
-  // Sync engine WPM when settings change
+  // Sync engine WPM when settings change (on mount only, or when settings.wpm changes)
   useEffect(() => {
     if (engine.wpm !== settings.wpm) {
       engine.setWpm(settings.wpm);
     }
-  }, [settings.wpm, engine]);
+    // Note: engine is intentionally excluded - we only want to sync when settings change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings.wpm]);
 
   // Handle WPM change - update both engine and settings
   const handleWpmChange = (wpm: number) => {
