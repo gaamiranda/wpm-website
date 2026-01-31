@@ -3,11 +3,10 @@
 import { WordDisplay } from './WordDisplay';
 import { FocusGuide } from './FocusGuide';
 import { ProgressBar } from './ProgressBar';
-import type { RSVPEngine, FontFamily, CompletionStats } from '@/types';
+import type { RSVPEngine, CompletionStats } from '@/types';
 
 interface ReaderContainerProps {
   engine: RSVPEngine;
-  fontFamily: FontFamily;
   focusGuideEnabled: boolean;
   completionStats: CompletionStats | null;
 }
@@ -21,7 +20,6 @@ interface ReaderContainerProps {
  */
 export function ReaderContainer({
   engine,
-  fontFamily,
   focusGuideEnabled,
   completionStats,
 }: ReaderContainerProps) {
@@ -47,7 +45,6 @@ export function ReaderContainer({
         {/* Word display */}
         <WordDisplay
           word={engine.currentWord?.text ?? null}
-          fontFamily={fontFamily}
           showPlaceholder={!hasContent}
         />
       </div>

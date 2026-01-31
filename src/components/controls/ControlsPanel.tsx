@@ -2,14 +2,11 @@
 
 import { PlaybackControls } from './PlaybackControls';
 import { SpeedControl } from './SpeedControl';
-import { FontSelector } from './FontSelector';
-import type { RSVPEngine, FontFamily } from '@/types';
+import type { RSVPEngine } from '@/types';
 
 interface ControlsPanelProps {
   engine: RSVPEngine;
-  fontFamily: FontFamily;
   focusGuideEnabled: boolean;
-  onFontChange: (font: FontFamily) => void;
   onFocusGuideToggle: () => void;
   onWpmChange: (wpm: number) => void;
 }
@@ -17,13 +14,11 @@ interface ControlsPanelProps {
 /**
  * ControlsPanel Component
  *
- * Groups all reader controls: playback, speed, font, and focus guide settings.
+ * Groups all reader controls: playback, speed, and focus guide settings.
  */
 export function ControlsPanel({
   engine,
-  fontFamily,
   focusGuideEnabled,
-  onFontChange,
   onFocusGuideToggle,
   onWpmChange,
 }: ControlsPanelProps) {
@@ -46,12 +41,8 @@ export function ControlsPanel({
       {/* Speed control */}
       <SpeedControl wpm={engine.wpm} onWpmChange={onWpmChange} />
 
-      {/* Settings row */}
-      <div className="flex w-full flex-wrap items-center justify-between gap-4 border-t border-zinc-800 pt-4">
-        {/* Font selector */}
-        <FontSelector value={fontFamily} onChange={onFontChange} />
-
-        {/* Focus guide toggle */}
+      {/* Focus guide toggle */}
+      <div className="flex w-full justify-center border-t border-zinc-800 pt-4">
         <FocusGuideToggle
           enabled={focusGuideEnabled}
           onToggle={onFocusGuideToggle}

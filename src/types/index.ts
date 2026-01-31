@@ -4,13 +4,9 @@ export interface WordToken {
   delayMultiplier: number; // 1.0 normal, 1.5 sentence end, 1.25 clause break
 }
 
-// Font family options
-export type FontFamily = 'mono' | 'sans' | 'serif';
-
 // Reader settings persisted to localStorage
 export interface ReaderSettings {
   wpm: number;
-  fontFamily: FontFamily;
   focusGuideEnabled: boolean;
 }
 

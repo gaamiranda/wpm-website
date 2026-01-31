@@ -18,19 +18,11 @@ export const CLAUSE_BREAK_PATTERN = /[,;:]$/;
 // Default settings
 export const DEFAULT_SETTINGS: ReaderSettings = {
   wpm: DEFAULT_WPM,
-  fontFamily: 'sans',
   focusGuideEnabled: true,
 };
 
 // localStorage key
 export const SETTINGS_STORAGE_KEY = 'rsvp-reader-settings';
-
-// Font family CSS mappings
-export const FONT_FAMILY_MAP = {
-  mono: '"JetBrains Mono", "Fira Code", "Consolas", monospace',
-  sans: '"Inter", system-ui, -apple-system, sans-serif',
-  serif: '"Merriweather", "Georgia", "Times New Roman", serif',
-} as const;
 
 // Accepted file types
 export const ACCEPTED_FILE_TYPES = {

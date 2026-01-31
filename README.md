@@ -8,7 +8,6 @@ A minimalist, dark-mode web application for speed reading using **Rapid Serial V
 - **ORP Highlighting** - The optimal focus point of each word is highlighted in red and centered, minimizing eye movement
 - **File Support** - Upload `.txt` files
 - **Smart Pausing** - Automatic pauses on punctuation (sentences, clauses) for better comprehension
-- **Font Options** - Choose between Monospace, Sans-serif, or Serif fonts
 - **Focus Guide** - Optional vertical guide lines to help focus on the ORP
 - **Keyboard Shortcut** - Press Space to play/pause
 - **Settings Persistence** - Your preferences are saved locally
@@ -72,7 +71,7 @@ This mimics natural reading rhythm and improves comprehension at high speeds.
 src/
 ├── app/                  # Next.js App Router
 ├── components/
-│   ├── controls/         # Playback, speed, font controls
+│   ├── controls/         # Playback and speed controls
 │   ├── reader/           # Word display, progress bar
 │   └── upload/           # File upload component
 ├── hooks/                # Custom React hooks

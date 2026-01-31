@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { ReaderSettings, FontFamily } from '@/types';
+import type { ReaderSettings } from '@/types';
 import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from '@/lib/constants';
 
 interface UseSettingsReturn {
   settings: ReaderSettings;
   updateWpm: (wpm: number) => void;
-  updateFontFamily: (fontFamily: FontFamily) => void;
   updateFocusGuide: (enabled: boolean) => void;
   resetSettings: () => void;
 }
@@ -31,7 +30,6 @@ function loadSettings(): ReaderSettings {
     // Merge with defaults to ensure all fields exist
     return {
       wpm: parsed.wpm ?? DEFAULT_SETTINGS.wpm,
-      fontFamily: parsed.fontFamily ?? DEFAULT_SETTINGS.fontFamily,
       focusGuideEnabled: parsed.focusGuideEnabled ?? DEFAULT_SETTINGS.focusGuideEnabled,
     };
   } catch {
@@ -80,10 +78,6 @@ export function useSettings(): UseSettingsReturn {
     setSettings((prev) => ({ ...prev, wpm }));
   }, []);
 
-  const updateFontFamily = useCallback((fontFamily: FontFamily) => {
-    setSettings((prev) => ({ ...prev, fontFamily }));
-  }, []);
-
   const updateFocusGuide = useCallback((enabled: boolean) => {
     setSettings((prev) => ({ ...prev, focusGuideEnabled: enabled }));
   }, []);
@@ -95,7 +89,6 @@ export function useSettings(): UseSettingsReturn {
   return {
     settings,
     updateWpm,
-    updateFontFamily,
     updateFocusGuide,
     resetSettings,
   };

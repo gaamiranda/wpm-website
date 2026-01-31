@@ -2,20 +2,12 @@
 
 import { useMemo } from 'react';
 import { splitWordByORP } from '@/lib/orp';
-import type { FontFamily } from '@/types';
 
 interface WordDisplayProps {
   word: string | null;
-  fontFamily: FontFamily;
   showPlaceholder?: boolean;
   placeholderText?: string;
 }
-
-const FONT_CLASS_MAP: Record<FontFamily, string> = {
-  mono: 'font-reader-mono',
-  sans: 'font-reader-sans',
-  serif: 'font-reader-serif',
-};
 
 /**
  * WordDisplay Component
@@ -26,7 +18,6 @@ const FONT_CLASS_MAP: Record<FontFamily, string> = {
  */
 export function WordDisplay({
   word,
-  fontFamily,
   showPlaceholder = true,
   placeholderText = 'Upload a file to begin reading',
 }: WordDisplayProps) {
@@ -36,8 +27,6 @@ export function WordDisplay({
     }
     return splitWordByORP(word);
   }, [word]);
-
-  const fontClass = FONT_CLASS_MAP[fontFamily];
 
   // If no word, show placeholder
   if (!word) {
@@ -53,13 +42,13 @@ export function WordDisplay({
   return (
     <div
       key={word} // Force re-render for animation
-      className={`reader-text word-animate flex items-center justify-center ${fontClass}`}
+      className="reader-text word-animate flex items-center justify-center"
       aria-live="polite"
       aria-atomic="true"
     >
       {/* Before pivot - right aligned */}
       <span
-        className="inline-block w-[140px] text-right text-4xl font-medium text-zinc-100 sm:w-[180px] sm:text-5xl [font-family:inherit]"
+        className="inline-block w-[140px] text-right text-4xl font-medium text-zinc-100 sm:w-[180px] sm:text-5xl"
         aria-hidden="true"
       >
         {before}
@@ -67,7 +56,7 @@ export function WordDisplay({
 
       {/* Pivot character - centered, highlighted */}
       <span
-        className="pivot-glow inline-block text-4xl font-bold text-red-500 sm:text-5xl [font-family:inherit]"
+        className="pivot-glow inline-block text-4xl font-bold text-red-500 sm:text-5xl"
         aria-hidden="true"
       >
         {pivot}
@@ -75,7 +64,7 @@ export function WordDisplay({
 
       {/* After pivot - left aligned */}
       <span
-        className="inline-block w-[140px] text-left text-4xl font-medium text-zinc-100 sm:w-[180px] sm:text-5xl [font-family:inherit]"
+        className="inline-block w-[140px] text-left text-4xl font-medium text-zinc-100 sm:w-[180px] sm:text-5xl"
         aria-hidden="true"
       >
         {after}

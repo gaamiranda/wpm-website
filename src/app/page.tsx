@@ -17,7 +17,7 @@ export default function Home() {
     useFileProcessor();
 
   // Persistent settings
-  const { settings, updateWpm, updateFontFamily, updateFocusGuide } = useSettings();
+  const { settings, updateWpm, updateFocusGuide } = useSettings();
 
   // UI state
   const [stats, setStats] = useState<CompletionStats | null>(null);
@@ -117,7 +117,6 @@ export default function Home() {
             {/* Reader container */}
             <ReaderContainer
               engine={engine}
-              fontFamily={settings.fontFamily}
               focusGuideEnabled={settings.focusGuideEnabled}
               completionStats={stats}
             />
@@ -126,9 +125,7 @@ export default function Home() {
             {!engine.isComplete && (
               <ControlsPanel
                 engine={engine}
-                fontFamily={settings.fontFamily}
                 focusGuideEnabled={settings.focusGuideEnabled}
-                onFontChange={updateFontFamily}
                 onFocusGuideToggle={() => updateFocusGuide(!settings.focusGuideEnabled)}
                 onWpmChange={handleWpmChange}
               />
