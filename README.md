@@ -22,14 +22,21 @@ npm install
 # Run development server
 npm run dev
 
-# Build for production
+# Build for production (static export)
 npm run build
-
-# Start production server
-npm run start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to use the app.
+
+## Deployment
+
+This app is configured for static export and GitHub Pages deployment.
+
+**Automatic deployment**: Push to `main` branch triggers the GitHub Actions workflow.
+
+**Manual deployment**:
+1. Run `npm run build` to generate the `out/` folder
+2. Deploy the contents of `out/` to any static hosting (GitHub Pages, Netlify, Vercel, etc.)
 
 ## Keyboard Shortcut
 
