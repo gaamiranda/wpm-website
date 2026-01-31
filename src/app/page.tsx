@@ -143,7 +143,7 @@ export default function Home() {
               Speed Reading Made Simple
             </h2>
             <p className="text-sm text-zinc-500">
-              Upload a .txt or .pdf file to start reading at up to 1000 WPM.
+              Upload a .txt file to start reading at up to 1000 WPM.
               <br />
               The red letter marks the optimal focus point for faster reading.
             </p>

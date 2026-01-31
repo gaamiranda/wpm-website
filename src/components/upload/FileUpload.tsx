@@ -15,7 +15,7 @@ interface FileUploadProps {
  * FileUpload Component
  *
  * Provides a drag-and-drop zone and file browser for uploading text files.
- * Supports .txt and .pdf files with visual feedback during drag operations.
+ * Supports .txt files with visual feedback during drag operations.
  */
 export function FileUpload({
   onFileSelect,

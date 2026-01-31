@@ -35,7 +35,6 @@ export const FONT_FAMILY_MAP = {
 // Accepted file types
 export const ACCEPTED_FILE_TYPES = {
   'text/plain': ['.txt'],
-  'application/pdf': ['.pdf'],
 } as const;
 
-export const ACCEPTED_EXTENSIONS = ['.txt', '.pdf'] as const;
+export const ACCEPTED_EXTENSIONS = ['.txt'] as const;

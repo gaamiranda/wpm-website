@@ -6,7 +6,7 @@ A minimalist, dark-mode web application for speed reading using **Rapid Serial V
 
 - **RSVP Display** - Words appear one at a time at your chosen speed (100-1000 WPM)
 - **ORP Highlighting** - The optimal focus point of each word is highlighted in red and centered, minimizing eye movement
-- **File Support** - Upload `.txt` or `.pdf` files
+- **File Support** - Upload `.txt` files
 - **Smart Pausing** - Automatic pauses on punctuation (sentences, clauses) for better comprehension
 - **Font Options** - Choose between Monospace, Sans-serif, or Serif fonts
 - **Focus Guide** - Optional vertical guide lines to help focus on the ORP
@@ -58,7 +58,6 @@ This mimics natural reading rhythm and improves comprehension at high speeds.
 - **Language**: TypeScript 5
 - **Styling**: Tailwind CSS v4
 - **Icons**: Lucide React
-- **PDF Processing**: PDF.js
 
 ## Project Structure
 
@@ -76,7 +75,6 @@ src/
 │   └── useSettings.ts
 ├── lib/                  # Utilities
 │   ├── orp.ts            # ORP calculation
-│   ├── textProcessor.ts  # Text tokenization
-│   └── pdfProcessor.ts   # PDF text extraction
+│   └── textProcessor.ts  # Text tokenization
 └── types/                # TypeScript definitions
 ```

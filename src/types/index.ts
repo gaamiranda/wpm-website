@@ -59,4 +59,4 @@ export interface ProcessedFile {
 }
 
 // Supported file types
-export type SupportedFileType = 'txt' | 'pdf';
+export type SupportedFileType = 'txt';

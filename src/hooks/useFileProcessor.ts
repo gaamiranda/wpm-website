@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import type { WordToken, ProcessedFile, SupportedFileType } from '@/types';
+import type { ProcessedFile } from '@/types';
 import { processTextFile } from '@/lib/textProcessor';
-import { processPDFFile } from '@/lib/pdfProcessor';
 
 interface UseFileProcessorReturn {
   processedFile: ProcessedFile | null;
@@ -14,29 +13,18 @@ interface UseFileProcessorReturn {
 }
 
 /**
- * Determines the file type from a File object.
- *
- * @param file - File to analyze
- * @returns The file type or null if unsupported
+ * Checks if file is a supported .txt file.
  */
-function getFileType(file: File): SupportedFileType | null {
+function isTxtFile(file: File): boolean {
   const extension = file.name.split('.').pop()?.toLowerCase();
-
-  switch (extension) {
-    case 'txt':
-      return 'txt';
-    case 'pdf':
-      return 'pdf';
-    default:
-      return null;
-  }
+  return extension === 'txt';
 }
 
 /**
  * useFileProcessor Hook
  *
  * Manages file processing state and provides methods for
- * loading and processing text and PDF files.
+ * loading and processing text files.
  */
 export function useFileProcessor(): UseFileProcessorReturn {
   const [processedFile, setProcessedFile] = useState<ProcessedFile | null>(null);
@@ -44,10 +32,8 @@ export function useFileProcessor(): UseFileProcessorReturn {
   const [error, setError] = useState<string | null>(null);
 
   const processFile = useCallback(async (file: File) => {
-    const fileType = getFileType(file);
-
-    if (!fileType) {
-      setError(`Unsupported file type: ${file.name}`);
+    if (!isTxtFile(file)) {
+      setError(`Unsupported file type. Please upload a .txt file.`);
       return;
     }
 
@@ -55,18 +41,7 @@ export function useFileProcessor(): UseFileProcessorReturn {
     setError(null);
 
     try {
-      let words: WordToken[];
-
-      switch (fileType) {
-        case 'txt':
-          words = await processTextFile(file);
-          break;
-        case 'pdf':
-          words = await processPDFFile(file);
-          break;
-        default:
-          throw new Error('Unsupported file type');
-      }
+      const words = await processTextFile(file);
 
       if (words.length === 0) {
         setError('No readable text found in file');
