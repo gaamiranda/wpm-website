@@ -37,6 +37,8 @@ export function useRSVPEngine(
   const accumulatedTimeRef = useRef<number>(0);
   const readingStartTimeRef = useRef<number>(0);
 
+
+
   // Calculate cumulative time for each word index (accounts for variable delays)
   const cumulativeTimes = useMemo(() => {
     if (words.length === 0) return [];
@@ -286,10 +288,16 @@ export function useRSVPEngine(
     return remaining / 1000;
   }, [words, currentIndex, wpm]);
 
-  // Reset when words change (new file loaded)
+  // Reset when words array reference changes (new file loaded)
+  // This is intentional - syncing React state with external data (words prop)
   useEffect(() => {
-    reset();
-  }, [words, reset]);
+    setCurrentIndex(0);
+    setIsPlaying(false);
+    setIsComplete(false);
+    accumulatedTimeRef.current = 0;
+    startTimeRef.current = 0;
+    readingStartTimeRef.current = 0;
+  }, [words]);
 
   return {
     // State

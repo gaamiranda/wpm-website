@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RSVP Speed Reader
+
+A minimalist, dark-mode web application for speed reading using **Rapid Serial Visual Presentation (RSVP)** with **Optimal Recognition Point (ORP)** highlighting.
+
+## Features
+
+- **RSVP Display** - Words appear one at a time at your chosen speed (100-1000 WPM)
+- **ORP Highlighting** - The optimal focus point of each word is highlighted in red and centered, minimizing eye movement
+- **File Support** - Upload `.txt` or `.pdf` files
+- **Smart Pausing** - Automatic pauses on punctuation (sentences, clauses) for better comprehension
+- **Font Options** - Choose between Monospace, Sans-serif, or Serif fonts
+- **Focus Guide** - Optional vertical guide lines to help focus on the ORP
+- **Keyboard Shortcuts** - Full keyboard control for power users
+- **Settings Persistence** - Your preferences are saved locally
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to use the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Keyboard Shortcuts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Key | Action |
+|-----|--------|
+| `Space` | Play / Pause |
+| `R` | Reset to beginning |
+| `←` | Previous sentence |
+| `→` | Next sentence |
+| `Shift + ←` | Previous word (when paused) |
+| `Shift + →` | Next word (when paused) |
+| `↑` | Increase WPM |
+| `↓` | Decrease WPM |
+| `1` / `2` / `3` | Mono / Sans / Serif font |
+| `G` | Toggle focus guide |
+| `?` | Show shortcuts help |
 
-## Learn More
+## How It Works
 
-To learn more about Next.js, take a look at the following resources:
+### Optimal Recognition Point (ORP)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The ORP is the character in a word where your eye naturally focuses for optimal recognition. It's typically located slightly left of center (around 35% into the word). By highlighting this pivot character in red and keeping it fixed in the center of the screen, your eyes don't need to move - the words come to you.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Punctuation-Aware Timing
 
-## Deploy on Vercel
+The reader automatically adjusts timing based on punctuation:
+- **Sentence endings** (`.` `!` `?`) - 1.5x pause
+- **Clause breaks** (`,` `;` `:`) - 1.25x pause
+- **Paragraph breaks** - 2x pause
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This mimics natural reading rhythm and improves comprehension at high speeds.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS v4
+- **Icons**: Lucide React
+- **PDF Processing**: PDF.js
+
+## Project Structure
+
+```
+src/
+├── app/                  # Next.js App Router
+├── components/
+│   ├── controls/         # Playback, speed, font controls
+│   ├── reader/           # Word display, progress bar
+│   └── upload/           # File upload component
+├── hooks/                # Custom React hooks
+│   ├── useRSVPEngine.ts  # Core timing engine
+│   ├── useFileProcessor.ts
+│   ├── useKeyboardShortcuts.ts
+│   └── useSettings.ts
+├── lib/                  # Utilities
+│   ├── orp.ts            # ORP calculation
+│   ├── textProcessor.ts  # Text tokenization
+│   └── pdfProcessor.ts   # PDF text extraction
+└── types/                # TypeScript definitions
+```
+
+## License
+
+MIT

@@ -1,24 +1,27 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { BookOpen } from 'lucide-react';
 import { useRSVPEngine } from '@/hooks/useRSVPEngine';
 import { useFileProcessor } from '@/hooks/useFileProcessor';
+import { useSettings } from '@/hooks/useSettings';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { ReaderContainer } from '@/components/reader';
-import { ControlsPanel } from '@/components/controls';
+import { ControlsPanel, KeyboardShortcutsHelp, KeyboardShortcutsButton } from '@/components/controls';
 import { FileUpload } from '@/components/upload';
-import type { CompletionStats, FontFamily } from '@/types';
-import { DEFAULT_WPM } from '@/lib/constants';
+import type { CompletionStats } from '@/types';
 
 export default function Home() {
   // File processing
   const { processedFile, isProcessing, error, processFile, clearFile } =
     useFileProcessor();
 
-  // Reader settings
-  const [fontFamily, setFontFamily] = useState<FontFamily>('sans');
-  const [focusGuideEnabled, setFocusGuideEnabled] = useState(true);
+  // Persistent settings
+  const { settings, updateWpm, updateFontFamily, updateFocusGuide } = useSettings();
+
+  // UI state
   const [stats, setStats] = useState<CompletionStats | null>(null);
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   // Get words from processed file, or empty array if no file
   const words = useMemo(
@@ -26,16 +29,51 @@ export default function Home() {
     [processedFile?.words]
   );
 
-  // RSVP Engine
+  // Has content to display
+  const hasContent = words.length > 0;
+
+  // RSVP Engine - sync WPM with settings
   const engine = useRSVPEngine(words, {
-    initialWpm: DEFAULT_WPM,
+    initialWpm: settings.wpm,
     onComplete: (completionStats) => {
       setStats(completionStats);
     },
   });
 
-  // Has content to display
-  const hasContent = words.length > 0;
+  // Sync engine WPM when settings change
+  useEffect(() => {
+    if (engine.wpm !== settings.wpm) {
+      engine.setWpm(settings.wpm);
+    }
+  }, [settings.wpm, engine]);
+
+  // Handle WPM change - update both engine and settings
+  const handleWpmChange = (wpm: number) => {
+    engine.setWpm(wpm);
+    updateWpm(wpm);
+  };
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    engine,
+    hasContent,
+    onFontChange: updateFontFamily,
+    onFocusGuideToggle: () => updateFocusGuide(!settings.focusGuideEnabled),
+    onWpmChange: handleWpmChange,
+  });
+
+  // Listen for ? key to show shortcuts
+  useEffect(() => {
+    const handleQuestionMark = (e: KeyboardEvent) => {
+      if (e.key === '?' && !showShortcuts) {
+        e.preventDefault();
+        setShowShortcuts(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleQuestionMark);
+    return () => window.removeEventListener('keydown', handleQuestionMark);
+  }, [showShortcuts]);
 
   // Handle file clear - also reset engine
   const handleClearFile = () => {
@@ -94,8 +132,8 @@ export default function Home() {
             {/* Reader container */}
             <ReaderContainer
               engine={engine}
-              fontFamily={fontFamily}
-              focusGuideEnabled={focusGuideEnabled}
+              fontFamily={settings.fontFamily}
+              focusGuideEnabled={settings.focusGuideEnabled}
               completionStats={stats}
             />
 
@@ -103,10 +141,10 @@ export default function Home() {
             {!engine.isComplete && (
               <ControlsPanel
                 engine={engine}
-                fontFamily={fontFamily}
-                focusGuideEnabled={focusGuideEnabled}
-                onFontChange={setFontFamily}
-                onFocusGuideToggle={() => setFocusGuideEnabled(!focusGuideEnabled)}
+                fontFamily={settings.fontFamily}
+                focusGuideEnabled={settings.focusGuideEnabled}
+                onFontChange={updateFontFamily}
+                onFocusGuideToggle={() => updateFocusGuide(!settings.focusGuideEnabled)}
               />
             )}
           </>
@@ -128,10 +166,18 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto pt-12 text-center text-xs text-zinc-600">
-        <p>Stage 3 - File Upload & Controls</p>
-        <p className="mt-1">Keyboard shortcuts coming in Stage 4</p>
+      <footer className="mt-auto flex flex-col items-center gap-2 pt-12">
+        <KeyboardShortcutsButton onClick={() => setShowShortcuts(true)} />
+        <p className="text-xs text-zinc-600">
+          RSVP Speed Reader
+        </p>
       </footer>
+
+      {/* Keyboard shortcuts modal */}
+      <KeyboardShortcutsHelp
+        isOpen={showShortcuts}
+        onClose={() => setShowShortcuts(false)}
+      />
     </div>
   );
 }

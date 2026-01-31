@@ -42,7 +42,9 @@ export function PlaybackControls({
       {/* Play/Pause */}
       <button
         onClick={onToggle}
-        className="control-button flex h-14 w-14 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
+        className={`control-button flex h-14 w-14 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600 ${
+          isPlaying ? 'playing-indicator' : ''
+        }`}
         aria-label={isPlaying ? 'Pause' : 'Play'}
         title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
       >

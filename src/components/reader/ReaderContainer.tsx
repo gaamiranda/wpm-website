@@ -30,7 +30,17 @@ export function ReaderContainer({
   return (
     <div className="flex w-full max-w-2xl flex-col items-center gap-6">
       {/* Main reading area */}
-      <div className="relative flex h-44 w-full items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sm:h-52">
+      <div
+        className="relative flex h-44 w-full items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sm:h-52"
+        role="region"
+        aria-label="Reading display"
+        aria-live={engine.isPlaying ? 'off' : 'polite'}
+      >
+        {/* Playing status indicator (screen readers) */}
+        <span className="sr-only">
+          {engine.isPlaying ? 'Reading in progress' : 'Paused'}
+        </span>
+
         {/* Focus guide lines */}
         <FocusGuide enabled={focusGuideEnabled && hasContent} />
 

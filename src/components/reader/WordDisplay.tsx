@@ -52,7 +52,8 @@ export function WordDisplay({
 
   return (
     <div
-      className={`reader-text flex items-center justify-center ${fontClass}`}
+      key={word} // Force re-render for animation
+      className={`reader-text word-animate flex items-center justify-center ${fontClass}`}
       aria-live="polite"
       aria-atomic="true"
     >
