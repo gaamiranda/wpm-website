@@ -59,7 +59,7 @@ export function WordDisplay({
     >
       {/* Before pivot - right aligned */}
       <span
-        className="inline-block w-[140px] text-right text-4xl font-medium text-zinc-100 sm:w-[180px] sm:text-5xl"
+        className="inline-block w-[140px] text-right text-4xl font-medium text-zinc-100 sm:w-[180px] sm:text-5xl [font-family:inherit]"
         aria-hidden="true"
       >
         {before}
@@ -67,7 +67,7 @@ export function WordDisplay({
 
       {/* Pivot character - centered, highlighted */}
       <span
-        className="pivot-glow inline-block text-4xl font-bold text-red-500 sm:text-5xl"
+        className="pivot-glow inline-block text-4xl font-bold text-red-500 sm:text-5xl [font-family:inherit]"
         aria-hidden="true"
       >
         {pivot}
@@ -75,7 +75,7 @@ export function WordDisplay({
 
       {/* After pivot - left aligned */}
       <span
-        className="inline-block w-[140px] text-left text-4xl font-medium text-zinc-100 sm:w-[180px] sm:text-5xl"
+        className="inline-block w-[140px] text-left text-4xl font-medium text-zinc-100 sm:w-[180px] sm:text-5xl [font-family:inherit]"
         aria-hidden="true"
       >
         {after}
