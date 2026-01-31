@@ -38,7 +38,7 @@ export function ControlsPanel({
         canSkipPrevious={canSkipPrevious}
         canSkipNext={canSkipNext}
         onToggle={engine.toggle}
-        onReset={engine.reset}
+        onGoToStart={() => engine.goToIndex(0)}
         onSkipPrevious={engine.skipToPreviousSentence}
         onSkipNext={engine.skipToNextSentence}
       />

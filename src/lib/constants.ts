@@ -1,10 +1,10 @@
 import type { ReaderSettings } from '@/types';
 
-// WPM constraints (testing range: 10-100 for slow playback debugging)
-export const MIN_WPM = 10;
-export const MAX_WPM = 100;
-export const WPM_STEP = 5;
-export const DEFAULT_WPM = 50;
+// WPM constraints
+export const MIN_WPM = 100;
+export const MAX_WPM = 1000;
+export const WPM_STEP = 25;
+export const DEFAULT_WPM = 300;
 
 // Punctuation delay multipliers
 export const SENTENCE_END_DELAY = 1.5; // For . ! ?

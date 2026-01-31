@@ -4,7 +4,7 @@ A minimalist, dark-mode web application for speed reading using **Rapid Serial V
 
 ## Features
 
-- **RSVP Display** - Words appear one at a time at your chosen speed (10-100 WPM for testing)
+- **RSVP Display** - Words appear one at a time at your chosen speed (100-1000 WPM)
 - **ORP Highlighting** - The optimal focus point of each word is highlighted in red and centered, minimizing eye movement
 - **File Support** - Upload `.txt` or `.pdf` files
 - **Smart Pausing** - Automatic pauses on punctuation (sentences, clauses) for better comprehension
