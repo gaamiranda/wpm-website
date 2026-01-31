@@ -90,7 +90,3 @@ src/
 │   └── pdfProcessor.ts   # PDF text extraction
 └── types/                # TypeScript definitions
 ```
-
-## License
-
-MIT
