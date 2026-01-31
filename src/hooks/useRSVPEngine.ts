@@ -36,6 +36,8 @@ export function useRSVPEngine(
   const pausedAtRef = useRef<number>(0);
   const accumulatedTimeRef = useRef<number>(0);
   const readingStartTimeRef = useRef<number>(0);
+  // Track last rendered index to avoid re-triggering effect on state change
+  const lastRenderedIndexRef = useRef<number>(0);
 
 
 
@@ -96,6 +98,9 @@ export function useRSVPEngine(
 
     // Set start time, accounting for any accumulated time from previous plays
     startTimeRef.current = performance.now() - accumulatedTimeRef.current;
+    
+    // Initialize the ref with current state
+    lastRenderedIndexRef.current = currentIndex;
 
     const tick = (now: number) => {
       const elapsed = now - startTimeRef.current;
@@ -104,6 +109,7 @@ export function useRSVPEngine(
       // Check if we've reached the end
       if (targetIndex >= words.length - 1 && elapsed >= totalReadingTime) {
         setCurrentIndex(words.length - 1);
+        lastRenderedIndexRef.current = words.length - 1;
         setIsPlaying(false);
         setIsComplete(true);
 
@@ -120,8 +126,9 @@ export function useRSVPEngine(
         return;
       }
 
-      // Update current index if changed
-      if (targetIndex !== currentIndex) {
+      // Update current index if changed (compare with ref, not state)
+      if (targetIndex !== lastRenderedIndexRef.current) {
+        lastRenderedIndexRef.current = targetIndex;
         setCurrentIndex(targetIndex);
       }
 
@@ -135,10 +142,12 @@ export function useRSVPEngine(
         cancelAnimationFrame(rafIdRef.current);
       }
     };
+    // Note: currentIndex is intentionally excluded to prevent infinite restart loop
+    // The ref (lastRenderedIndexRef) tracks the actual index inside the animation loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isPlaying,
     words,
-    currentIndex,
     findIndexForTime,
     totalReadingTime,
     onComplete,

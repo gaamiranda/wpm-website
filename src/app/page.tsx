@@ -145,6 +145,7 @@ export default function Home() {
                 focusGuideEnabled={settings.focusGuideEnabled}
                 onFontChange={updateFontFamily}
                 onFocusGuideToggle={() => updateFocusGuide(!settings.focusGuideEnabled)}
+                onWpmChange={handleWpmChange}
               />
             )}
           </>

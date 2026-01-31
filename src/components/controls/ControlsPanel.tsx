@@ -11,6 +11,7 @@ interface ControlsPanelProps {
   focusGuideEnabled: boolean;
   onFontChange: (font: FontFamily) => void;
   onFocusGuideToggle: () => void;
+  onWpmChange: (wpm: number) => void;
 }
 
 /**
@@ -24,6 +25,7 @@ export function ControlsPanel({
   focusGuideEnabled,
   onFontChange,
   onFocusGuideToggle,
+  onWpmChange,
 }: ControlsPanelProps) {
   const canSkipPrevious = engine.currentIndex > 0;
   const canSkipNext = engine.currentIndex < engine.words.length - 1;
@@ -42,7 +44,7 @@ export function ControlsPanel({
       />
 
       {/* Speed control */}
-      <SpeedControl wpm={engine.wpm} onWpmChange={engine.setWpm} />
+      <SpeedControl wpm={engine.wpm} onWpmChange={onWpmChange} />
 
       {/* Settings row */}
       <div className="flex w-full flex-wrap items-center justify-between gap-4 border-t border-zinc-800 pt-4">
